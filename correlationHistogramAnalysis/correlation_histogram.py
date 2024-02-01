@@ -111,13 +111,28 @@ def get_pairs(epos):
 
 
 def corr_his(m1, m2, nbins):
+    """
+    creates a histogram based on the mass-to-charge values m1 and m2, and number of bins    
+    Parameters
+    ----------
+    m1 : float
+        mass-to-charge of the first daughter.
+    m2 : float
+        mass-to-charge value of the second daughter.
+    nbins : int
+        number of bins for histogram
+
+    Returns
+    -------
+    histogram and edge values for m1 and m2.
+    """
     m1edges = np.linspace(np.min(m1), np.max(m1), num=nbins)
     m2edges = np.linspace(np.min(m2), np.max(m2), num=nbins)
-    H, x_edges, y_edges = np.histogram2d(m1, m2, bins=(m1edges, m2edges))
+    h, _, _ = np.histogram2d(m1, m2, bins=(m1edges, m2edges))
     # Histogram does not follow Cartesian convention (see Notes),
     # therefore transpose H for visualization purposes.
-    H = H.T
-    return H, m1edges, m2edges
+    h = h.T
+    return h, m1edges, m2edges
 
 
 def diss_track(m1, m2, mp, interp_points=100):
