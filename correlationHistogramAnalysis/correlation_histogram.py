@@ -40,11 +40,11 @@ def read_epos(f):
         ~ Appendix A of 'Atom Probe tomography: A Users Guide',
           notes on ePOS format."""
     # read in the data
-    with open(f, 'rb') as file:
+    with open(f, "rb") as file:
         n = len(file.read()) / 4
         rs = n / 11
-    with open(f, 'rb') as file:
-        d = struct.unpack('>' + 'fffffffffII' * int(rs), file.read(4 * int(n)))
+    with open(f, "rb") as file:
+        d = struct.unpack(">" + "fffffffffII" * int(rs), file.read(4 * int(n)))
         epos = np.array(d)
         epos = epos.reshape([int(rs), 11])
     return epos
@@ -85,7 +85,7 @@ def get_pairs(epos):
     m2 : float-array
         second of the mass-to-charge pairs,
         with multiplicity>1.
-     dx,dy: x y detector coordinates   
+     dx,dy: x y detector coordinates
 
 
     """
@@ -112,7 +112,7 @@ def get_pairs(epos):
 
 def corr_his(m1, m2, nbins):
     """
-    creates a histogram based on the mass-to-charge values m1 and m2, and number of bins    
+    creates a histogram based on the mass-to-charge values m1 and m2, and number of bins
     Parameters
     ----------
     m1 : float

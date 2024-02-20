@@ -11,7 +11,9 @@ from collections import Counter
 def parse_formula(formula):
     """Works for formulas of form AxBy where x,y=1 do not have to be mentioned otherwise x,y <=9"""
     elements = {}
-    for char, nxtchar, nxt2char in zip(formula, formula[1:] + formula[:1], formula[2:] + formula[:2]):
+    for char, nxtchar, nxt2char in zip(
+        formula, formula[1:] + formula[:1], formula[2:] + formula[:2]
+    ):
         if char.isalpha() & char.isupper():
             if nxtchar.isalpha() & nxtchar.islower():
                 if nxt2char.isnumeric():
@@ -25,7 +27,9 @@ def parse_formula(formula):
             else:
                 elements[char] = int(nxtchar)
     prime_list = [2, 3, 5, 7, 9, 11, 13, 17, 19, 23, 31, 37, 41, 43, 47]
-    elements_prime = dict([(y, prime_list[x]) for x, y in enumerate(sorted(set(elements)))])
+    elements_prime = dict(
+        [(y, prime_list[x]) for x, y in enumerate(sorted(set(elements)))]
+    )
     return elements, elements_prime
 
 
@@ -59,7 +63,11 @@ def generate_triple_products(elements):
             for j in range(1, len(temp)):
                 second_product = temp[:j]
                 third_product = temp[j:]
-                trip = (tuple(sorted(first_product)), tuple(sorted(second_product)), tuple(sorted(third_product)))
+                trip = (
+                    tuple(sorted(first_product)),
+                    tuple(sorted(second_product)),
+                    tuple(sorted(third_product)),
+                )
                 triplet = tuple(sorted(trip))  # Sort the elements to ensure uniqueness
                 if triplet not in triplets:
                     triplets.add(triplet)
@@ -76,12 +84,12 @@ def product_reparser(p1):
         else:
             product.append(key + str(p1[key]))
 
-    product = ''.join(product)
+    product = "".join(product)
     return product
 
 
 def possible_product_pairs(complex_formula, charge):
-    """ Based on the chemical formula, product pairs are generated efficiently."""
+    """Based on the chemical formula, product pairs are generated efficiently."""
     original_dict, _ = parse_formula(complex_formula)
 
     def szudzik_pairing(a, b):
@@ -106,14 +114,20 @@ def possible_product_pairs(complex_formula, charge):
                 pair1 = {key: i}
                 pair2 = {key: value - i}
                 new_pair = {**current_pair, **pair1}
-                pairs.extend(generate_recursive_pairs(new_pair, remaining_values, remaining_keys))
+                pairs.extend(
+                    generate_recursive_pairs(new_pair, remaining_values, remaining_keys)
+                )
                 new_pair = {**current_pair, **pair2}
-                pairs.extend(generate_recursive_pairs(new_pair, remaining_values, remaining_keys))
+                pairs.extend(
+                    generate_recursive_pairs(new_pair, remaining_values, remaining_keys)
+                )
 
             return pairs
 
         all_pairs = generate_recursive_pairs({}, values, keys)
-        unique_permutations = [dict(y) for y in set(tuple(x.items()) for x in all_pairs)]
+        unique_permutations = [
+            dict(y) for y in set(tuple(x.items()) for x in all_pairs)
+        ]
         return unique_permutations
 
     unique_perms = generate_pairs(original_dict)
@@ -121,13 +135,24 @@ def possible_product_pairs(complex_formula, charge):
     daughter_2 = {}
     count = 0
     prime_list = [2, 3, 5, 7, 9, 11, 13, 17, 19, 23, 31, 37, 41, 43, 47]
-    elements_prime = dict([(y, prime_list[x]) for x, y in enumerate(sorted(set(list(original_dict.keys()))))])
+    elements_prime = dict(
+        [
+            (y, prime_list[x])
+            for x, y in enumerate(sorted(set(list(original_dict.keys()))))
+        ]
+    )
 
     for i in range(len(unique_perms)):
-        if all(value == 0 for value in unique_perms[i].values()) or unique_perms[i] == original_dict:
+        if (
+            all(value == 0 for value in unique_perms[i].values())
+            or unique_perms[i] == original_dict
+        ):
             continue
         daughter_1[count] = unique_perms[i]
-        daughter_2[count] = {key: original_dict[key] - unique_perms[i][key] for key in original_dict.keys()}
+        daughter_2[count] = {
+            key: original_dict[key] - unique_perms[i][key]
+            for key in original_dict.keys()
+        }
         count += 1
 
     sp = []
@@ -186,14 +211,21 @@ def possible_product_triplets(complex_formula, charge):
     return product_trip_1, product_trip_2, product_trip_3, ccp
 
 
-def associate_mass(elements_mass, complex_formula=None, parent_charge=None, product_1=None, product_2=None,
-                   charge_states=None, react_dict=None):
+def associate_mass(
+    elements_mass,
+    complex_formula=None,
+    parent_charge=None,
+    product_1=None,
+    product_2=None,
+    charge_states=None,
+    react_dict=None,
+):
     if react_dict is not None:
-        complex_formula = react_dict['parent']
-        parent_charge = react_dict['cp']
-        product_1, _ = parse_formula(react_dict['daughter_1'])
-        product_2, _ = parse_formula(react_dict['daughter_2'])
-        charge_states = [react_dict['cd1'], react_dict['cd2']]
+        complex_formula = react_dict["parent"]
+        parent_charge = react_dict["cp"]
+        product_1, _ = parse_formula(react_dict["daughter_1"])
+        product_2, _ = parse_formula(react_dict["daughter_2"])
+        charge_states = [react_dict["cd1"], react_dict["cd2"]]
     mp = 0
     ss, _ = parse_formula(complex_formula)
     for key, value in ss.items():
@@ -221,8 +253,14 @@ def digitize_track(m1e, m2e, m1d, m2d, h):
 def index_values_in_bin(m1, m2, ind, m1e, m2e, bins_along_track):
     indices_in_bin = []
     for i in range(len(bins_along_track)):
-        indices_m1 = np.where((m1[ind] >= m1e[bins_along_track[i, 0]]) & (m1[ind] < m1e[bins_along_track[i, 0] + 1]))[0]
-        indices_m2 = np.where((m2[ind] >= m2e[bins_along_track[i, 1]]) & (m2[ind] < m2e[bins_along_track[i, 1] + 1]))[0]
+        indices_m1 = np.where(
+            (m1[ind] >= m1e[bins_along_track[i, 0]])
+            & (m1[ind] < m1e[bins_along_track[i, 0] + 1])
+        )[0]
+        indices_m2 = np.where(
+            (m2[ind] >= m2e[bins_along_track[i, 1]])
+            & (m2[ind] < m2e[bins_along_track[i, 1] + 1])
+        )[0]
         if len(np.intersect1d(indices_m1, indices_m2)) != 0:
             indices_in_bin.append(np.intersect1d(indices_m1, indices_m2))
     indices_in_bin = np.concatenate(indices_in_bin)
