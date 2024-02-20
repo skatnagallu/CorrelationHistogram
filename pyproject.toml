@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "correlationHistogramAnalysis"
 version = "0.2.1"
+license = { file = "LICENSE.txt" }
 authors = [
   { name="Shyam Katnagallu", email="s.katnagallu@mpie.de" },
 ]
