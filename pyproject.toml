@@ -23,7 +23,7 @@ maintainers = [
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = [
-    "tests",
+    "tests/",
 ]
 [project.urls]
 Homepage = "https://github.com/skatnagallu/CorrelationHistogram"
