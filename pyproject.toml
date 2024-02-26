@@ -19,6 +19,12 @@ classifiers = [
 maintainers = [
   {name = "Shyam Katnagallu", email = "s.katnagallu@mpie.de"}
 ]
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
 [project.urls]
 Homepage = "https://github.com/skatnagallu/CorrelationHistogram"
 Issues = "https://github.com/skatnagallu/CorrelationHistogram/issues"
