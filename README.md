@@ -7,5 +7,5 @@ A unique advantage of straight flight path atom probes is the rich information i
 # Installation
 Install the latest verion using 
 ```
-pip install correlationHistogramAnalysis==0.2.1
+pip install correlationHistogramAnalysis
 ```
