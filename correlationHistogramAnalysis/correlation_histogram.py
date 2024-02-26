@@ -5,48 +5,22 @@ Created on Mon June  19 14:09:39 2023
 @author: Katnagallu
 """
 
-import struct
 import numpy as np
+from ifes_apt_tc_data_modeling.epos.epos_reader import ReadEposFileFormat
 
 
-def read_epos(f):
-    """Loads an APT .epos file as a numpy matrix.
-    Columns:
-        x: Reconstructed x position
-        y: Reconstructed y position
-        z: Reconstructed z position
-        Da: Mass/charge ratio of ion
-        ns: Ion Time Of Flight
-        DC_kV: Potential
-        pulse_kV: Size of voltage pulse (voltage pulsing mode only)
-        det_x: Detector x position
-        det_y: Detector y position
-        pslep: Pulses since last event pulse (i.e. ionisation rate)
-        ipp: Ions per pulse (multihits)
-     [x,y,z,Da,ns,DC_kV,pulse_kV,det_x,det_y,pslep,ipp].
-        pslep = pulses since last event pulse
-        ipp = ions per pulse
-    When more than one ion is recorded for a given pulse, only the
-    first event will have an entry in the "Pulses since last evenT
-    pulse" column. Each subsequent event for that pulse will have
-    an entry of zero because no additional pulser firings occurred
-    before that event was recorded. Likewise, the "Ions Per Pulse"
-    column will contain the total number of recorded ion events for
-    a given pulse. This is normally one, but for a sequence of records
-    a pulse with multiply recorded ions, the first ion record will
-    have the total number of ions measured in that pulse, while the
-    remaining records for that pulse will have 0 for the Ions Per
-    Pulse value.
-        ~ Appendix A of 'Atom Probe tomography: A Users Guide',
-          notes on ePOS format."""
-    # read in the data
-    with open(f, "rb") as file:
-        n = len(file.read()) / 4
-        rs = n / 11
-    with open(f, "rb") as file:
-        d = struct.unpack(">" + "fffffffffII" * int(rs), file.read(4 * int(n)))
-        epos = np.array(d)
-        epos = epos.reshape([int(rs), 11])
+def get_epos(file_name):
+    epos_reader = ReadEposFileFormat(file_name)
+    epos = np.zeros([epos_reader.number_of_events,11])
+    epos[:,:3] = epos_reader.get_reconstructed_positions().values
+    epos[:,3] = epos_reader.get_mass_to_charge_state_ratio().values[:,0]
+    epos[:,4] = epos_reader.get_raw_time_of_flight().values[:,0]
+    epos[:,5] =  epos_reader.get_standing_voltage().values[:,0]
+    epos[:,6] = epos_reader.get_pulse_voltage().values[:,0]
+    epos[:,7:9] = epos_reader.get_hit_positions().values
+    epos[:,9] = epos_reader.get_number_of_pulses().values[:,0]
+    epos[:,10] = epos_reader.get_ions_per_pulse().values[:,0]
+    
     return epos
 
 
