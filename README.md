@@ -9,3 +9,8 @@ Install the latest verion using
 ```
 pip install correlationHistogramAnalysis
 ```
+# Publication
+In this  pre-print[1] the module is used to analyse the oxygen loses in iron oxides analysed from APT. Based on possible reactions predicted from ground state density functional theory (DFT).
+
+# Reference
+[1] Kim, Se-Ho, Shalini Bhatt, Daniel K. Schreiber, Jörg Neugebauer, Christoph Freysoldt, Baptiste Gault, and Shyam Katnagallu. "Understanding atom probe's analytical performance for iron oxides using correlation histograms and ab initio calculations." arXiv preprint arXiv:2401.12784 (2024).
