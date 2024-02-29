@@ -6,7 +6,7 @@ The notebooks can be run after the installation of the correlationHistogramAnaly
 
 All the notebooks have the following structure.
  1. import necessary modules.
- 2. Processing DFT energies to identify possible reactions. (The results from the relevant successful DFY calculations were extracted via command line scripting and compiled manually into the final_energy_new.csv .)
+ 2. Processing DFT energies to identify possible reactions. (The results from the relevant successful DFT calculations were extracted via command line scripting and compiled manually into the final_energy_new.csv .)
  3. Processing APT data (epos files) to overlay identified reactions in the correlation histograms.
 
  Notes:
